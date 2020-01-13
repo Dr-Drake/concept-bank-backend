@@ -23,7 +23,7 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 // Mongodb connection
-mongoose.connect(config.mongoURI, config.mongoCFG).catch(
+mongoose.connect(process.env.PROD_MONGODB, config.mongoCFG).catch(
   (error)=> console.log(JSON.stringify(error))
 )
 console.log(config.mongoCFG)
