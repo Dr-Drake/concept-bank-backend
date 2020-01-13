@@ -27,6 +27,7 @@ mongoose.connect(config.mongoURI, config.mongoCFG).catch(
   (error)=> console.log(JSON.stringify(error))
 )
 console.log(config.mongoCFG)
+console.log(config.mongoURI)
 
 // Router level middlewares
 app.use('/', fundRouter);
