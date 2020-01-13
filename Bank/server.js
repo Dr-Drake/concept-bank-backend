@@ -26,7 +26,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 mongoose.connect(process.env.PROD_MONGODB, config.mongoCFG).catch(
   (error)=> console.log(JSON.stringify(error))
 )
-console.log(config.mongoCFG)
+console.log(process.env.PROD_MONGODB)
 console.log(config.mongoURI)
 
 // Router level middlewares
