@@ -92,7 +92,7 @@ api.post("/createAccount", (req, res)=>{
 })
 
 api.get("/initcustomer", async function(req, res){
-    
+    console.log("Initiating customer...")
     if (req.query.requester && req.query.requester === "user1"){
         
         var details ={
