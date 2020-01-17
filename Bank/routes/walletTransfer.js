@@ -1,5 +1,6 @@
 var express = require("express");
 var api = express.Router();
+var errorHandler = require("../errorHandlers/handler")
 
 // Models
 const Account = require("../models/account")
