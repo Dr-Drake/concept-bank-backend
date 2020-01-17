@@ -23,10 +23,12 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 // Mongodb connection
-mongoose.connect(config.mongoURI, config.mongoCFG).catch(
-  (error)=> console.log(JSON.stringify(error))
+mongoose.connect(config.mongoURI, config.mongoCFG).then(()=>{
+  console.log("Connection to the Atlas Cluster is successful")
+}).catch(
+  (error)=> console.log(error.message)
 )
-console.log(process.env.PROD_MONGODB)
+console.log(config.mongoURI)
 console.log(config.mongoCFG)
 
 // Router level middlewares
