@@ -5,6 +5,13 @@ const Account = require("../models/account")
 const axios = require("axios")
 const giveAccNo = require("../config/give_account")
 
+var initUrl ="";
+
+if (process.env.NODE_ENV === "development"){
+    initUrl = "http://localhost:2020/initaccount"
+} else {
+    initUrl = "https://bankfintech.herokuapp.com/initaccount"
+}
 
 // Function for logging when async is finished
 const log = (...obj) => (
@@ -37,7 +44,7 @@ async function initaccount(){
                 account_type: info_use.account_type 
             }
     
-            axios.post("http://localhost:2020/initaccount", payload).then(function(response){
+            axios.post(initUrl, payload).then(function(response){
                 console.log("posted")
                 console.log(response.data)
             }).catch((error)=>{
