@@ -8,9 +8,9 @@ const username = encodeURI(username2)
 const password = encodeURI("Fintech123")
 
 module.exports = {
-    mongoURI: `mongodb+srv://Drake:Fintech123@cluster0-iebwm.mongodb.net/test?retryWrites=true&w=majority`,
+    mongoURI: `mongodb://localhost:27017/test`,
     mongoCFG:{
-        dbName: "test",
+       // dbName: "test",
         useNewUrlParser: true
     }
 };

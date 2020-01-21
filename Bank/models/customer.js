@@ -2,6 +2,7 @@ const {connection, Schema} = require("mongoose");
 const crypto = require("crypto")
 const Account = require("./account");
 const giveAccNo = require("../config/give_account")
+const errorHandler = require("../errorHandlers/handler")
 
 // Define Customer schema
 const CustomerSchema = new Schema({
@@ -41,46 +42,49 @@ const CustomerSchema = new Schema({
 })
 
 // Defining a static model method for creating a customer
-CustomerSchema.static("add", async function(options){
+CustomerSchema.static("add", async function(options, res){
     try{
         // Does this customer already exist?
-    const exist = await this.findOne({
-        firstname: options.firstname,
-        lastname: options.lastname
-    })
+        const exist = await this.findOne({
+            firstname: options.firstname,
+            lastname: options.lastname
+        })
 
-    console.log(`What we found was ${exist}`)
+        console.log(`What we found was ${exist}`)
 
-    if (exist && options.account_type === "wallet") {
-        var accNo = giveAccNo()
-        Account.add(exist._id, accNo, options.account_type)
-        
-        return true
-    } else if(exist) {
-        throw new Error("Customer already exists")
-    } else{
-        // If not, create the new user
+        if (exist && options.account_type === "wallet") {
+            Account.add(exist._id, options.account_type)
+            
+            return true
+        } else if(exist) {
+            var error = new Error("Customer already exists")
+            error.status = 400;
+            return errorHandler(error, res);  
+        } else{
+            // If not, create the new user
 
-        if (options.phoneNumber){
-            this.create({
-                firstname: options.firstname,
-                lastname: options.lastname,
-                phoneNumber: options.phoneNumber
-            })
+            if (options.phoneNumber){
+                this.create({
+                    firstname: options.firstname,
+                    lastname: options.lastname,
+                    phoneNumber: options.phoneNumber
+                })
 
-            console.log("account created with Phone number")
-        } else {
-            this.create({
-                firstname: options.firstname,
-                lastname: options.lastname
-            })
-            console.log("account created!")
+                console.log("account created with Phone number")
+            } else {
+                this.create({
+                    firstname: options.firstname,
+                    lastname: options.lastname
+                })
+                console.log("account created!")
+            }
+
+            return true
         }
-
-        return true
-    }
     } catch(e){
         console.log(e)
+        console.log("Customer creation error")
+        return errorHandler(error, res);
     }
      
 })

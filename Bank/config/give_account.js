@@ -18,6 +18,7 @@ function generateAccNo(){
 
 }
 
+/** =============== Depracated for now ========== **/
 // Function for checking if account number exists
 async function isTaken (accountNo){
     try{
@@ -42,7 +43,7 @@ async function isTaken (accountNo){
 
 
 }
-
+/** =============== Depracated for now ========== **/
 // Function for generating a unique account number
 function giveAccNo (){
     var accNo = generateAccNo()
@@ -59,4 +60,4 @@ function giveAccNo (){
     } 
 }
 
-module.exports = giveAccNo
+module.exports = generateAccNo

@@ -22,6 +22,17 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
+// Custom Error Handler
+app.use(function(err, req, res, next) {
+  const status = err.status || 500;
+  console.log(`ERROR: ${status}`);
+  //console.log(err.stack)
+  res.status(status).json({
+    message: err.message,
+    error: err
+  });
+});
+
 // Mongodb connection
 mongoose.connect(config.mongoURI, config.mongoCFG).then(()=>{
   console.log("Connection to the Atlas Cluster is successful")

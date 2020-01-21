@@ -1,6 +1,7 @@
 var express = require("express");
 var api = express.Router();
 var errorHandler = require("../errorHandlers/handler")
+var validatepin = require("../middlewares/validatePin")
 
 // Models
 const Account = require("../models/account")
@@ -23,7 +24,7 @@ async function initiateTransfer(debitAcc, creditAcc, amount) {
             account_to_credit.credit(amount)
 
             // Instantiate and store the transaction
-            Transaction.add(account_to_debit._id, account_to_credit._id, amount)
+            Transaction.add(account_to_debit.accountNumber, account_to_credit.accountNumber, amount)
             }
         
     } catch (e){
@@ -33,7 +34,7 @@ async function initiateTransfer(debitAcc, creditAcc, amount) {
 
 
 
-api.post("/walletTransfer", (req, res)=>{
+api.post("/walletTransfer", validatepin, async (req, res)=>{
     if (req.body.type !== 3){
         var error = new Error("Invalid Transaction request")
         error.status = 400;
@@ -42,7 +43,8 @@ api.post("/walletTransfer", (req, res)=>{
 
     try{
         initiateTransfer(req.body.account_to_debit, req.body.account_to_credit, req.body.amount)
-        res.status(200).json({message: "Transaction Successful"})
+        res.status(200).json({message: "Transaction Successful",
+        amount: req.body.amount})
     }
     catch (error){
         res.status(400).json({message: "Transaction Failed",

@@ -1,5 +1,7 @@
 const {connection, Schema} = require("mongoose");
 const crypto = require("crypto");
+const giveAccNo = require("../config/give_account")
+const givePin = require("../config/give_secret")
 
 const AccountSchema = new Schema({
     customer_id:{
@@ -24,11 +26,21 @@ const AccountSchema = new Schema({
         required:[true, "Account number is required"],
         minlength: 10,
         maxlength: 10,
+        default: giveAccNo(),
+        unique: true
     },
 
     balance:{
         type: Number,
         required: true
+    },
+
+    pin:{
+        type: Number,
+        minlength: 4,
+        maxlength: 4,
+        default: givePin(),
+        required: [true, "Pin must be a 4 digit number"]
     }
 })
 
@@ -55,7 +67,7 @@ AccountSchema.method("credit", async function(amount){
 
 
 // Defining a static model method for creating an account
-AccountSchema.static("add", async function(customer_id, accountNo, accType){
+AccountSchema.static("add", async function(customer_id, accType, res){
    console.log("Account creating...")
 
    try{
@@ -66,21 +78,22 @@ AccountSchema.static("add", async function(customer_id, accountNo, accType){
        if (accType === "wallet"){
            await this.create({
                customer_id: customer_id,
-                accountNumber: accountNo,
                 accountType: accType,
                 balance: 0
             })
+            console.log("Account created")
        } else {
         await this.create({
             customer_id: customer_id,
-            accountNumber: accountNo,
             accountType: accType,
             balance: 100000
         })
+        console.log("Account created")
        }
     
    } catch(e){
        console.log("Account creation Error: "+e)
+       return errorHandler(e, res);  
    }
     
     

@@ -2,13 +2,13 @@ const {connection, Schema} = require("mongoose");
 const crypto = require("crypto");
 
 const TransactionSchema = new Schema({
-    account_credited_id:{
-        type:Object,
+    account_credited:{
+        type: Number,
         required:[true, "id should be an ObjectId"]
     },
 
-    account_debited_id:{
-        type: Object,
+    account_debited:{
+        type: Number,
         required: [true, "id should be an ObjectId"]
     },
 
@@ -26,10 +26,10 @@ const TransactionSchema = new Schema({
 })
 
 // Defining a static model method for creating transactions
-TransactionSchema.static("add", async function(debitAcc_id, creditAcc_id, amount){
+TransactionSchema.static("add", async function(debitAcc, creditAcc, amount){
     this.create({
-        account_credited_id: creditAcc_id,
-        account_debited_id: debitAcc_id,
+        account_credited: creditAcc,
+        account_debited: debitAcc,
         amount: amount
     })
 })
