@@ -78,6 +78,7 @@ AccountSchema.static("add", async function(customer_id, accType, res){
            await this.create({
                customer_id: customer_id,
                 accountType: accType,
+                accountNumber: giveAccNo(),
                 balance: 0
             })
             console.log("Account created")
