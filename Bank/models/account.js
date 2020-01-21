@@ -26,7 +26,6 @@ const AccountSchema = new Schema({
         required:[true, "Account number is required"],
         minlength: 10,
         maxlength: 10,
-        default: giveAccNo(),
         unique: true
     },
 
@@ -86,6 +85,7 @@ AccountSchema.static("add", async function(customer_id, accType, res){
         await this.create({
             customer_id: customer_id,
             accountType: accType,
+            accountNumber: giveAccNo(),
             balance: 100000
         })
         console.log("Account created")
