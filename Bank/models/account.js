@@ -38,7 +38,6 @@ const AccountSchema = new Schema({
         type: Number,
         minlength: 4,
         maxlength: 4,
-        default: givePin(),
         required: [true, "Pin must be a 4 digit number"]
     }
 })
@@ -79,7 +78,8 @@ AccountSchema.static("add", async function(customer_id, accType, res){
                customer_id: customer_id,
                 accountType: accType,
                 accountNumber: giveAccNo(),
-                balance: 0
+                balance: 0,
+                pin: givePin()
             })
             console.log("Account created")
        } else {
@@ -87,7 +87,8 @@ AccountSchema.static("add", async function(customer_id, accType, res){
             customer_id: customer_id,
             accountType: accType,
             accountNumber: giveAccNo(),
-            balance: 100000
+            balance: 100000,
+            pin: givePin()
         })
         console.log("Account created")
        }
