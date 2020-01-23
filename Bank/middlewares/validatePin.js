@@ -2,6 +2,8 @@ const Account = require("../models/account")
 
 async function validatepin(req, res, next) {
     // Validate the pin
+
+    console.log(req.body.account_to_debit)
     try{
         const account = await Account.findOne({
             accountNumber: req.body.account_to_debit
