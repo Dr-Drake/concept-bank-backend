@@ -23,8 +23,8 @@ async function validatepin(req, res, next) {
             }
         } else {
             var error = new Error("Account does not exist")
-            error.status = 400;
-            next(error)
+            error.status = 404;
+            throw error
         }
     } catch(e){
         console.log("ERROR!")

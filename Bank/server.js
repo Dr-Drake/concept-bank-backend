@@ -3,7 +3,8 @@ var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 var cors = require("cors")
-
+var bodyParser = require('body-parser')
+var methodOverride = require('method-override')
 
 const mongoose = require("mongoose")
 const config = require(__dirname + "/config/keys")
@@ -18,20 +19,14 @@ var app = express();
 // Midllewares
 app.use(logger('dev'));
 app.use(express.json());
-app.use(express.urlencoded({ extended: false }));
+app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
-
-// Custom Error Handler
-app.use(function(err, req, res, next) {
-  const status = err.status || 500;
-  console.log(`ERROR: ${status}`);
-  //console.log(err.stack)
-  res.status(status).json({
-    message: err.message,
-    error: err
-  });
-});
+//app.use(bodyParser.urlencoded({
+ // extended: true
+//}))
+//app.use(bodyParser.json())
+app.use(methodOverride())
 
 // Mongodb connection
 mongoose.connect(config.mongoURI, config.mongoCFG).then(()=>{
@@ -46,6 +41,16 @@ console.log(config.mongoCFG)
 app.use('/', fundRouter);
 app.use('/', customerRouter);
 
+// Custom Error Handler
+app.use(function(err, req, res, next) {
+  const status = err.status || 500;
+  console.log(`ERROR: ${status}`);
+  //console.log(err.stack)
+  res.status(status).json({
+    message: err.message,
+    error: err
+  });
+});
 
 // Listen for connection on port
 const PORT = process.env.PORT || 2020
